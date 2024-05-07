@@ -18,7 +18,7 @@ Sub MainDocument()
     Dim commentDate As String
     Dim commentText As String
     Dim headingName As String
-    Dim pageNumber As Long
+    Dim pageNumber As String
     Dim commenterFullName As String
 
     Dim napasNames As Variant
@@ -120,6 +120,13 @@ Sub MainDocument()
         .Cells(count, 8).Value = headingName
         .Cells(count, 9).Value = pageNumber
         .Cells(count, 10).Value = commenterFullName
+
+        ' Reset all values To null
+        commentDate = Empty
+        commentText = Empty
+        headingName = Empty
+        pageNumber = Empty
+        commenterFullName = Empty
       Next i
     End With
 
