@@ -1,4 +1,4 @@
-Sub CopyCommentsToExcel()
+Sub SubDocument()
   ' Create an Excel application
   Dim xlApp As Object
   On Error Resume Next
