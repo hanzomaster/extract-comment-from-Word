@@ -42,12 +42,11 @@ Sub CopyCommentsToExcel()
       .Cells(count, 3).Value = "Date"
       .Cells(count, 4).Value = "Comment"
       .Cells(count, 5).Value = "Response"
-      .Cells(count, 6).Value = "Vietnamese"
-      .Cells(count, 7).Value = "Status"
-      .Cells(count, 8).Value = "Heading"
-      .Cells(count, 9).Value = "Page"
-      .Cells(count, 10).Value = "Commenter"
-      .Cells(count, 11).Value = "Deadline"
+      .Cells(count, 6).Value = "Status"
+      .Cells(count, 7).Value = "Heading"
+      .Cells(count, 8).Value = "Page"
+      .Cells(count, 9).Value = "Commenter"
+      .Cells(count, 10).Value = "Deadline"
 
 
       ' Loop through all comments in the active document
@@ -122,32 +121,25 @@ Sub CopyCommentsToExcel()
           .Cells(count, 5).Value = ActiveDocument.Comments(i).Range.Text
         End If
 
-        ' Check If the comment is resolve, If it is Then Set the Status column To "Resolved" Else "Pending"
-        If (ActiveDocument.Comments(i).Done) Then
-          .Cells(count, 7).Value = "Resolved"
-        Else
-          .Cells(count, 7).Value = "Pending"
-        End If
-
         ' Populate the Excel sheet
         .Cells(count, 3).Value = Format(commentDate, "mm/dd/yyyy")
 
-        .Cells(count, 8).Value = headingName
-        .Cells(count, 9).Value = pageNumber
-        .Cells(count, 10).Value = commenterFullName
+        .Cells(count, 7).Value = headingName
+        .Cells(count, 8).Value = pageNumber
+        .Cells(count, 9).Value = commenterFullName
       Next i
     End With
 
     ' Format the Excel sheet
     With xlWB.Worksheets(1)
-      .Columns("D:F").WrapText = True
+      .Columns("D:E").WrapText = True
       ' Set vertical align middle For all cells
       .Cells.VerticalAlignment = xlCenter
       ' Set horizontal align center For A, B, C, F, G, H, I columns
       .Columns("A:C").HorizontalAlignment = xlCenter
-      .Columns("G:J").HorizontalAlignment = xlCenter
+      .Columns("F:I").HorizontalAlignment = xlCenter
       ' Make D And E columns wider
-      .Columns("D:F").ColumnWidth = 50
+      .Columns("D:E").ColumnWidth = 50
       ' AutoFit the columns
       .Columns("A:J").AutoFit
       ' AutoFit rows height from 1 To count
@@ -158,7 +150,7 @@ Sub CopyCommentsToExcel()
     ' Add yellow background For row which index match is True in the ancestorLineNumber array
     For i = 1 To UBound(ancestorLineNumber)
       If ancestorLineNumber(i) Then
-        xlWB.Worksheets(1).Range("A" & i & ":K" & i).Interior.Color = RGB(255, 235, 156)
+        xlWB.Worksheets(1).Range("A" & i & ":J" & i).Interior.Color = RGB(255, 235, 156)
       End If
     Next i
     ' Clean up
