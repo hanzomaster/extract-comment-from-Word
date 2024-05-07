@@ -56,18 +56,6 @@ Sub MainDocument()
 
         commentDate = ActiveDocument.Comments(i).Date
         commentText = ActiveDocument.Comments(i).Range.Text
-
-        ' If (ActiveDocument.Comments(i).Ancestor Is Nothing) Then
-
-        'Set headingRange = ActiveDocument.Comments(i).Reference.Goto(What:=wdGoToHeading, Which:=wdGoToPrevious)
-        'If Not headingRange Is Nothing Then
-        'headingName = headingRange.Paragraphs(1).Range.Text
-        'Else
-        'headingName = "No Heading Found"
-        'End If
-
-        pageNumber = ActiveDocument.Comments(i).Scope.Information(wdActiveEndAdjustedPageNumber)
-
         commenterFullName = ActiveDocument.Comments(i).Author
 
         ' Check For NAPAS names
@@ -98,23 +86,19 @@ Sub MainDocument()
           .Cells(count, 2).Value = "SAVIS"
         End If
 
-        ' Find nearest heading
-        Set headingRange = ActiveDocument.Comments(i).Reference.Goto(What:=wdGoToHeading, Which:=wdGoToPrevious)
-        If Not headingRange Is Nothing Then
-          headingName = headingRange.Paragraphs(1).Range.Text
-        Else
-          headingName = "No Heading Found"
-        End If
-        ' Find page number
-        pageNumber = ActiveDocument.Comments(i).Scope.Information(wdActiveEndAdjustedPageNumber)
-        ' Find commenter's full name
-        commenterFullName = ActiveDocument.Comments(i).Author
-
         ' Check For comments With no ancestor
         If (ActiveDocument.Comments(i).Ancestor Is Nothing) Then
           ancestorLineNumber(count) = True
           ancestorCount = ancestorCount + 1
 
+          ' Find nearest heading
+          Set headingRange = ActiveDocument.Comments(i).Reference.Goto(What:=wdGoToHeading, Which:=wdGoToPrevious)
+          If Not headingRange Is Nothing Then
+            headingName = headingRange.Paragraphs(1).Range.Text
+          Else
+            headingName = "No Heading Found"
+          End If
+          pageNumber = ActiveDocument.Comments(i).Scope.Information(wdActiveEndAdjustedPageNumber)
           ' Check If the comment is resolve, If it is Then Set the Status column To "Resolved" Else "Pending"
           If (ActiveDocument.Comments(i).Done) Then
             .Cells(count, 7).Value = "Resolved"
