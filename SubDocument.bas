@@ -104,14 +104,20 @@ Sub SubDocument()
         Else
           headingName = "No Heading Found"
         End If
+        pageNumber = ActiveDocument.Comments(i).Scope.Information(wdActiveEndAdjustedPageNumber)
+        commenterFullName = ActiveDocument.Comments(i).Author
 
         ' Check For comments With no ancestor
         If (ActiveDocument.Comments(i).Ancestor Is Nothing) Then
           ancestorLineNumber(count) = True
           ancestorCount = ancestorCount + 1
 
-          pageNumber = ActiveDocument.Comments(i).Scope.Information(wdActiveEndAdjustedPageNumber)
-          commenterFullName = ActiveDocument.Comments(i).Author
+          ' Check If the comment is resolve, If it is Then Set the Status column To "Resolved" Else "Pending"
+          If (ActiveDocument.Comments(i).Done) Then
+            .Cells(count, 6).Value = "Resolved"
+          Else
+            .Cells(count, 6).Value = "Pending"
+          End If
 
           ' Fill in the "Comment" column
           .Cells(count, 1).Value = ancestorCount
