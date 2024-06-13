@@ -39,6 +39,9 @@ Sub MainDocument()
     ancestorCount = 8
     responseCount = 0
 
+    Dim startDate As String
+    startDate = "01/06/2024"
+
     ' === Main worksheet code ===
     With xlWB.Worksheets(1)
       ' Add column headers
@@ -58,6 +61,11 @@ Sub MainDocument()
 
         commentDate = ActiveDocument.Comments(i).Date
         formattedDate = Format(commentDate, "dd/mm/yyyy")
+        ' Check if the comment is older than the startDate, if it is then skip it
+        If DateDiff("d", startDate, formattedDate) < 0 Then
+          count = count - 1
+          GoTo nextComment
+        End If
         commentText = ActiveDocument.Comments(i).Range.Text
         commenterFullName = ActiveDocument.Comments(i).Author
 
@@ -113,8 +121,15 @@ Sub MainDocument()
           End If
 
           .Cells(count, 8).Value = commentHeader & vbCrLf & commentText
+
+        ' Populate the Excel sheet
+        .Cells(count, 1).Value = count - 1
+        .Cells(count, 3).Value = headingName
+        .Cells(count, 4).Value = pageNumber
+        .Cells(count, 7).Value = commenterFullName
         Else
           ancestorCount = ancestorCount + 1
+          count = count - 1
           .Cells(count, ancestorCount).Value = commentHeader & vbCrLf & commentText
           ' check if the first row of the ancestorCount column is empty, if it is then set the column to "Response" + responseCount
           If .Cells(1, ancestorCount).Value = "" Then
@@ -123,12 +138,7 @@ Sub MainDocument()
           End If
         End If
 
-        ' Populate the Excel sheet
-        .Cells(count, 1).Value = count
-        .Cells(count, 3).Value = headingName
-        .Cells(count, 4).Value = pageNumber
-        .Cells(count, 7).Value = commenterFullName
-
+        nextComment:
         ' Reset all values To null
         commentDate = Empty
         commentText = Empty
